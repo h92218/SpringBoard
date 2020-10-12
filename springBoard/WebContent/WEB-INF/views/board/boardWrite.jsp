@@ -140,7 +140,7 @@ function addRow(){
 							'<input type="hidden" name="boardVoList['+rowCount+'].creator" value="${userId}">';
 	
 	rowCount++;
-	alert(rowCount);
+
 }
 
 
@@ -154,10 +154,6 @@ function deleteRow(obj){
 	tr.prev().remove();
 	tr.prev().remove();
 	tr.remove();
-	
-	rowCount--;  
-	alert(rowCount);
-	
 
 }
 
