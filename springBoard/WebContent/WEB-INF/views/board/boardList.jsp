@@ -24,7 +24,9 @@
 				<c:if test="${userId!=null}">
 					[${userName}]님 로그인
 				</c:if> 
-		total : ${totalCnt}</td>
+		total : ${totalCnt}
+		<input type="button" onclick="location.href='/board/excelDown.do'" value="다운로드">
+			</td>
 
 		</tr>
 		<tr>

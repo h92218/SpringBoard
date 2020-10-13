@@ -39,4 +39,6 @@ public interface boardService {
 	public String selectPw(String userPw) throws Exception;
 	
 	public String selectName(String userId) throws Exception;
+	
+	public List<BoardVo> selectAll() throws Exception;
 }

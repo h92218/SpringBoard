@@ -125,6 +125,12 @@ public class boardServiceImpl implements boardService{
 		// TODO Auto-generated method stub
 		return boardDao.selectName(userId);
 	}
+
+	@Override
+	public List<BoardVo> selectAll() throws Exception {
+		// TODO Auto-generated method stub
+		return boardDao.selectAll();
+	}
 	
 	
 }

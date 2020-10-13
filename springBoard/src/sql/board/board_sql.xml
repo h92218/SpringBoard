@@ -28,6 +28,11 @@
     </resultMap>
     
     
+    <select id="selectAll" resultMap="boardVo">
+    	select * from board
+    </select>
+    
+    
     <select id="selectName" parameterType="String" resultType="String">
     	select user_name
    	 	from user_info

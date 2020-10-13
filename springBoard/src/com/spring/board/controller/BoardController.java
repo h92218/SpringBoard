@@ -9,8 +9,19 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -360,5 +371,116 @@ public class BoardController {
 		return "redirect:/board/boardList.do";
 	}
 	
+	//엑셀로 출력하기
+	@RequestMapping(value="/board/excelDown.do")
+	public void excelDown(HttpServletResponse response) throws Exception {
+		
+		//게시판 목록조회
+		List<BoardVo> boardList = boardService.selectAll();
+		
+		//1. 워크북 생성(생성하고자 하는 엑셀 형태에 따른 선언)
+		Workbook wb = new XSSFWorkbook(); //xlsx 엑셀 2007 이상
+
+		
+		//2. 시트 생성 및 시트명 설정(매개변수를 비우면 default)
+		Sheet sheet1 = wb.createSheet("test");
+		
+		//열 너비 설정
+		sheet1.setColumnWidth(0, 5500);
+		sheet1.setColumnWidth(1, 5500);
+		sheet1.setColumnWidth(2, 5500);
+		sheet1.setColumnWidth(3, 5500);
+		sheet1.setColumnWidth(4, 5500);
+		
+		//3.테이블 헤더 스타일 지정
+		CellStyle headStyle = wb.createCellStyle();
+		//데이터 가운데 정렬
+		headStyle.setAlignment(HorizontalAlignment.CENTER);
+		//경계선
+	    headStyle.setBorderTop(BorderStyle.THIN);
+	    headStyle.setBorderBottom(BorderStyle.THIN);
+	    headStyle.setBorderLeft(BorderStyle.THIN);
+	    headStyle.setBorderRight(BorderStyle.THIN);
+	    // 배경색은 연두
+	    headStyle.setFillForegroundColor(HSSFColorPredefined.LIGHT_GREEN.getIndex());
+	    headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 	
+		
+		//4. 헤더 생성
+		Row row = null;
+		Cell cell = null;
+		int rowNo = 0;
+		
+		row = sheet1.createRow(rowNo++);
+		
+		cell = row.createCell(0);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("boardType");
+		
+		cell = row.createCell(1);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("boardNum");
+		
+		cell = row.createCell(2);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("boardTitle");
+		
+		cell = row.createCell(3);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("boardComment");
+		
+		cell = row.createCell(4);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("Creator");
+		
+		//테이블 바디 스타일 지정
+		CellStyle bodyStyle = wb.createCellStyle();
+		//데이터 가운데 정렬
+		bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+		//경계선
+		bodyStyle.setBorderTop(BorderStyle.THIN);
+		bodyStyle.setBorderBottom(BorderStyle.THIN);
+		bodyStyle.setBorderLeft(BorderStyle.THIN);
+		bodyStyle.setBorderRight(BorderStyle.THIN);
+		
+		//5. 데이터 부분 생성
+		for(BoardVo vo : boardList) {
+		row = sheet1.createRow(rowNo++);
+			
+		cell = row.createCell(0);
+		cell.setCellStyle(bodyStyle);
+		cell.setCellValue(vo.getBoardType());
+		
+		cell = row.createCell(1);
+		cell.setCellStyle(bodyStyle);
+		cell.setCellValue(vo.getBoardNum());
+		
+		cell = row.createCell(2);
+		cell.setCellStyle(bodyStyle);
+		cell.setCellValue(vo.getBoardTitle());
+		
+		cell = row.createCell(3);
+		cell.setCellStyle(bodyStyle);
+		cell.setCellValue(vo.getBoardComment());
+		
+		cell = row.createCell(4);
+		cell.setCellStyle(bodyStyle);
+		cell.setCellValue(vo.getCreator());
+		
+		}
+		
+		//컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+		  response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
+
+		//엑셀 출력
+		  wb.write(response.getOutputStream());
+		  wb.close();
+		
+		
+		
+		
+	}
+
+
 }

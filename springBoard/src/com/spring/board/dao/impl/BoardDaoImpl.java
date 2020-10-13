@@ -103,6 +103,11 @@ public class BoardDaoImpl implements BoardDao{
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("selectName", userId);
 	}
+	@Override
+	public List<BoardVo> selectAll() throws Exception {
+		return sqlSession.selectList("selectAll");
+		
+	}
 	
 	
 }
