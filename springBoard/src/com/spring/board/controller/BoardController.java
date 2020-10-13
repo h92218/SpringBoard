@@ -385,28 +385,28 @@ public class BoardController {
 		//2. 시트 생성 및 시트명 설정(매개변수를 비우면 default)
 		Sheet sheet1 = wb.createSheet("test");
 		
-		//열 너비 설정
+		//3. 열 너비 설정
 		sheet1.setColumnWidth(0, 5500);
 		sheet1.setColumnWidth(1, 5500);
 		sheet1.setColumnWidth(2, 5500);
 		sheet1.setColumnWidth(3, 5500);
 		sheet1.setColumnWidth(4, 5500);
 		
-		//3.테이블 헤더 스타일 지정
+		//4.테이블 헤더 스타일 지정
 		CellStyle headStyle = wb.createCellStyle();
-		//데이터 가운데 정렬
+			//데이터 가운데 정렬
 		headStyle.setAlignment(HorizontalAlignment.CENTER);
-		//경계선
+			//경계선
 	    headStyle.setBorderTop(BorderStyle.THIN);
 	    headStyle.setBorderBottom(BorderStyle.THIN);
 	    headStyle.setBorderLeft(BorderStyle.THIN);
 	    headStyle.setBorderRight(BorderStyle.THIN);
-	    // 배경색은 연두
+	    	// 배경색은 연두색
 	    headStyle.setFillForegroundColor(HSSFColorPredefined.LIGHT_GREEN.getIndex());
 	    headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 	
 		
-		//4. 헤더 생성
+		//5. 헤더 생성
 		Row row = null;
 		Cell cell = null;
 		int rowNo = 0;
@@ -433,17 +433,17 @@ public class BoardController {
 		cell.setCellStyle(headStyle);
 		cell.setCellValue("Creator");
 		
-		//테이블 바디 스타일 지정
+		//6. 테이블 바디 스타일 지정
 		CellStyle bodyStyle = wb.createCellStyle();
-		//데이터 가운데 정렬
+			//데이터 가운데 정렬
 		bodyStyle.setAlignment(HorizontalAlignment.CENTER);
-		//경계선
+			//경계선
 		bodyStyle.setBorderTop(BorderStyle.THIN);
 		bodyStyle.setBorderBottom(BorderStyle.THIN);
 		bodyStyle.setBorderLeft(BorderStyle.THIN);
 		bodyStyle.setBorderRight(BorderStyle.THIN);
 		
-		//5. 데이터 부분 생성
+		//7. 데이터 부분 생성
 		for(BoardVo vo : boardList) {
 		row = sheet1.createRow(rowNo++);
 			
@@ -469,11 +469,11 @@ public class BoardController {
 		
 		}
 		
-		//컨텐츠 타입과 파일명 지정
+		//8. 컨텐츠 타입과 파일명 지정
 		response.setContentType("ms-vnd/excel");
-		  response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
+		 response.setHeader("Content-Disposition", "attachment;filename=test.xlsx");
 
-		//엑셀 출력
+		//9. 엑셀 출력
 		  wb.write(response.getOutputStream());
 		  wb.close();
 		
