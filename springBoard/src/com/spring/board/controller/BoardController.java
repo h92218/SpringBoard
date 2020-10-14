@@ -1,7 +1,9 @@
 package com.spring.board.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -12,15 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -475,12 +480,162 @@ public class BoardController {
 
 		//9. 엑셀 출력
 		  wb.write(response.getOutputStream());
-		  wb.close();
-		
-		
-		
+		  wb.close();	
 		
 	}
+	
+	//엑셀에 달력출력 
+	@RequestMapping(value="/board/Calendar.do")
+	public void calendar (HttpServletResponse response) throws Exception{
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		//10월 1일의 요일 구하기
+		calendar.set(2020, 9,1);
+		int day1=calendar.get(Calendar.DAY_OF_WEEK);
+		System.out.println("1일의 요일 : " + day1);
+		
+		//일 수 구하기
+		int days = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		System.out.println("일 수 : " + days);
+		
+		//주 수 구하기
+		int weeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+		System.out.println("주 수 : " + weeks);
+		
+		//월 구하기
+		int month = calendar.get(Calendar.MONTH)+1;
+		System.out.println("월 : " + month);
+		
+		//파일 읽기
+		FileInputStream fis = new FileInputStream("C:\\Users\\TOPIA\\Desktop\\calendar.xlsx");
+		//워크북 생성
+		Workbook wb = new XSSFWorkbook(fis);
+		//시트 읽기
+		Sheet sheet = wb.getSheetAt(0);
+		
+		//행의 수 읽기
+		int rows =sheet.getPhysicalNumberOfRows();
+		//열의 수 읽기
+		Row row = sheet.getRow(0);
+		int cells = row.getPhysicalNumberOfCells();
+		Cell cell=null;
+		
+		//시트 생성 
+		Sheet sheet1 = wb.createSheet("calender");	
 
+		//숫자 쓸 폰트 지정
+		Font font = wb.createFont();
+		font.setColor(HSSFColorPredefined.WHITE.getIndex());
+		
+		//요일 헤더 스타일 지정
+		CellStyle dayStyle = wb.createCellStyle();
+			//데이터 가운데 정렬
+		dayStyle.setAlignment(HorizontalAlignment.CENTER);
+			//경계선
+		dayStyle.setBorderTop(BorderStyle.THIN);
+		dayStyle.setBorderBottom(BorderStyle.THIN);
+			// 배경색은 연두색
+		dayStyle.setFillForegroundColor(HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+		dayStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
+		Row calendarRow=null;
+		Cell calendarCell=null;
+		
+		int rowindex=0;
+		int columnindex=0;
+		
+		
+		//월 표시
+		calendarRow = sheet1.createRow(rowindex);
+		calendarCell  = calendarRow.createCell(0);
+		calendarCell.setCellValue(month);
+		calendarCell  = calendarRow.createCell(1);
+		calendarCell.setCellValue("월");
+		rowindex++;//rowindex=1
+		
+		
+		//요일 행 만들기
+		calendarRow = sheet1.createRow(rowindex);
+		String[] daystring= {"일","월","화","수","목","금","토"};
+		int dayorder=0;
+		
+		for(int i=0;i<7*cells;i++) {
+		calendarCell = calendarRow.createCell(i);
+		calendarCell.setCellStyle(dayStyle);
+		
+		if(i%cells==1) {
+			calendarCell.setCellValue(daystring[dayorder]);
+			dayorder++;
+		}
+		
+		} rowindex++; //rowindex==2;
+					
+
+		//셀 스타일 읽어와서 담기
+		CellStyle[][] bodystyle = new CellStyle[rows][cells];
+		for(int rownum=0;rownum<rows;rownum++) {
+			row = sheet.getRow(rownum);
+			for(int cellnum=0;cellnum<cells;cellnum++) {
+				cell=row.getCell(cellnum);
+				bodystyle[rownum][cellnum]=cell.getCellStyle(); 
+				if(rownum==0) {
+					bodystyle[rownum][cellnum].setFont(font);
+				}
+			}
+		}
+		
+	
+		//날짜 만들기
+		int AbsoluteRowNum = 2;
+		int dayofmonth=1;
+	
+		for(int weekrow=0;weekrow<weeks;weekrow++) { //n개 주를 만들때까지 반복 , weeks = 그달의 주 수 
+
+			for(int rownum=0;rownum<rows;rownum++) {
+				calendarRow = sheet1.createRow(AbsoluteRowNum++);//행 만들기 
+	
+					
+				for(int daynum=0;daynum<7;daynum++) {
+					for(int cellindex=0;cellindex<3;cellindex++) {
+						//셀 만들기
+						calendarCell = calendarRow.createCell(cells*daynum+cellindex);
+						calendarCell.setCellStyle(bodystyle[rownum][cellindex]);
+						
+						
+						if(rownum==0 && cellindex==1 && dayofmonth<=days && dayofmonth>=2) {
+							calendarCell.setCellValue(dayofmonth);
+							dayofmonth++;
+						}
+						
+						
+						if(weekrow==0 && rownum ==0 && day1 == daynum+1 && cellindex==1) {
+							calendarCell.setCellValue(dayofmonth);
+							dayofmonth++;
+						}
+						
+						
+						
+					
+					}
+				}
+				
+			}
+		}
+		
+		
+
+	
+		//컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+		response.setHeader("Content-Disposition", "attachment;filename=calentdar_test.xlsx");
+
+		//엑셀 출력
+		wb.write(response.getOutputStream());
+		wb.close();
+		
+		
+		
+		}//달력출력 끝 
 
 }

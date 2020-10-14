@@ -26,6 +26,7 @@
 				</c:if> 
 		total : ${totalCnt}
 		<input type="button" onclick="location.href='/board/excelDown.do'" value="다운로드">
+		<input type="button" onclick="location.href='/board/Calendar.do'" value="달력보기">
 			</td>
 
 		</tr>
