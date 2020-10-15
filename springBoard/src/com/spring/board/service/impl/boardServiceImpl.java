@@ -131,6 +131,12 @@ public class boardServiceImpl implements boardService{
 		// TODO Auto-generated method stub
 		return boardDao.selectAll();
 	}
+
+	@Override
+	public int countByDate(String create_time) throws Exception {
+		// TODO Auto-generated method stub
+		return boardDao.countByDate(create_time);
+	}
 	
 	
 }

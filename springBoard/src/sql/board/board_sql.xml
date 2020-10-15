@@ -28,6 +28,14 @@
     </resultMap>
     
     
+    <select id="countByDate" parameterType="String" resultType="int">
+    select count(*) 
+    from board
+    where create_time=#{create_time}
+    </select>
+    
+    
+    
     <select id="selectAll" resultMap="boardVo">
     	select * from board
     </select>

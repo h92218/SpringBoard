@@ -41,5 +41,7 @@ public interface BoardDao {
 	public String selectName(String userId) throws Exception;
 	
 	public List<BoardVo> selectAll() throws Exception;
+	
+	public int countByDate(String create_time) throws Exception;
 
 }

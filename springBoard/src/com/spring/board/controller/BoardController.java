@@ -486,12 +486,30 @@ public class BoardController {
 	
 	//엑셀에 달력출력 
 	@RequestMapping(value="/board/Calendar.do")
-	public void calendar (HttpServletResponse response) throws Exception{
-		
+	public void calendar (HttpServletResponse response, HttpServletRequest request) throws Exception{
+		String req_month = request.getParameter("req_month");
+		String req_year = request.getParameter("req_year");
+
 		Calendar calendar = Calendar.getInstance();
 		
-		//10월 1일의 요일 구하기
-		calendar.set(2020, 9,1);
+		//월 구하기 (-1)
+		System.out.println("선택 월 : " + req_month);
+
+		int month=0;
+		month= Integer.parseInt(req_month)-1;
+		
+
+		
+		//년도 구하기
+		String year = "";
+		
+		year=req_year;
+		
+		
+		System.out.println("선택 년도 : " + year);
+
+		//1일의 요일 구하기
+		calendar.set(2020,month,1);
 		int day1=calendar.get(Calendar.DAY_OF_WEEK);
 		System.out.println("1일의 요일 : " + day1);
 		
@@ -503,9 +521,12 @@ public class BoardController {
 		int weeks = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
 		System.out.println("주 수 : " + weeks);
 		
-		//월 구하기
-		int month = calendar.get(Calendar.MONTH)+1;
+	
+		//표시용 월
+		month =  month+1;
 		System.out.println("월 : " + month);
+		
+
 		
 		//파일 읽기
 		FileInputStream fis = new FileInputStream("C:\\Users\\TOPIA\\Desktop\\calendar.xlsx");
@@ -535,7 +556,7 @@ public class BoardController {
 			//경계선
 		dayStyle.setBorderTop(BorderStyle.THIN);
 		dayStyle.setBorderBottom(BorderStyle.THIN);
-			// 배경색은 연두색
+			// 배경색은 노란색
 		dayStyle.setFillForegroundColor(HSSFColorPredefined.LIGHT_YELLOW.getIndex());
 		dayStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		
@@ -549,6 +570,7 @@ public class BoardController {
 		//월 표시
 		calendarRow = sheet1.createRow(rowindex);
 		calendarCell  = calendarRow.createCell(0);
+		System.out.println("표시 직전 월 : " + month);
 		calendarCell.setCellValue(month);
 		calendarCell  = calendarRow.createCell(1);
 		calendarCell.setCellValue("월");
@@ -585,10 +607,22 @@ public class BoardController {
 			}
 		}
 		
-	
-		//날짜 만들기
+		//월앞에 0붙이기
+		String Month=Integer.toString(month);
+		if(month>=1 && month<=9) {
+			Month = "0"+Integer.toString(month);
+		}
+		
+		//년도 두자리 자르기
+		String Year = year.substring(2,4);		
+		
+		String create_time="";		
+		String Dayofmonth="";
+		
+		//달력 표 만들기
 		int AbsoluteRowNum = 2;
 		int dayofmonth=1;
+		int createDay=1;
 	
 		for(int weekrow=0;weekrow<weeks;weekrow++) { //n개 주를 만들때까지 반복 , weeks = 그달의 주 수 
 
@@ -597,32 +631,46 @@ public class BoardController {
 	
 					
 				for(int daynum=0;daynum<7;daynum++) {
-					for(int cellindex=0;cellindex<3;cellindex++) {
+					for(int cellindex=0;cellindex<cells;cellindex++) {
 						//셀 만들기
 						calendarCell = calendarRow.createCell(cells*daynum+cellindex);
 						calendarCell.setCellStyle(bodystyle[rownum][cellindex]);
 						
-						
+						//셀값설정 : 숫자 2~막날
 						if(rownum==0 && cellindex==1 && dayofmonth<=days && dayofmonth>=2) {
 							calendarCell.setCellValue(dayofmonth);
 							dayofmonth++;
 						}
-						
-						
+						//셀값설정 : 숫자 1		
 						if(weekrow==0 && rownum ==0 && day1 == daynum+1 && cellindex==1) {
 							calendarCell.setCellValue(dayofmonth);
 							dayofmonth++;
+							
 						}
 						
+						//셀값 설정 : 글 갯수 (2일~ 막날)
+						if(rownum==2 && cellindex==1 && createDay>=2 & createDay <=days) {
+							if(createDay>=1&&createDay<=9) {Dayofmonth="0"+Integer.toString(createDay);}
+							else {Dayofmonth = Integer.toString(createDay);}
+							create_time=Year+"/"+Month + "/"+Dayofmonth;
+							calendarCell.setCellValue("글" + boardService.countByDate(create_time) + "개");	
+							createDay++;
+						}
+		
 						
-						
-					
+						//셀값설정 : 글개수 입력 (1일)
+						if(weekrow == 0 && rownum==2 && day1 == daynum+1 && cellindex==1 ) {
+							if(createDay>=1&&createDay<=9) {Dayofmonth="0"+Integer.toString(createDay);}
+							else {Dayofmonth = Integer.toString(createDay);}
+							create_time= Year+"/"+Month + "/" +Dayofmonth;
+							calendarCell.setCellValue("글" + boardService.countByDate(create_time) + "개");	
+							createDay++;
+						}				
+										
 					}
-				}
-				
+				}				
 			}
 		}
-		
 		
 
 	

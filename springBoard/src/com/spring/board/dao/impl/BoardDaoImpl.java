@@ -108,6 +108,11 @@ public class BoardDaoImpl implements BoardDao{
 		return sqlSession.selectList("selectAll");
 		
 	}
+	@Override
+	public int countByDate(String create_time) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("countByDate",create_time);
+	}
 	
 	
 }
