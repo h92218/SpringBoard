@@ -88,17 +88,50 @@
 	
 	<input type="text" id="test">
 	
-
+<div>
+	<input type="button" class="key" value="ㅃ" >
+	<input type="button" class="key" value="ㅉ" >
+	<input type="button" class="key" value="ㄸ" >
+	<input type="button" class="key" value="ㄲ" >
+	<input type="button" class="key" value="ㅆ" >
+	　　　　　　　
+	<input type="button" class="key" value="ㅒ" >
+	<input type="button" class="key" value="ㅖ" >
+	<input type="button" class="key" value="◀-">
+	<br>
+	<input type="button" class="key" value="ㅂ" >
+	<input type="button" class="key" value="ㅈ" >
+	<input type="button" class="key" value="ㄷ" >
 	<input type="button" class="key" value="ㄱ" >
-	<input type="button" class="key" value="ㅁ" >
 	<input type="button" class="key" value="ㅅ" >
+	　
+	<input type="button" class="key" value="ㅛ" >
+	<input type="button" class="key" value="ㅕ" >
+	<input type="button" class="key" value="ㅑ" >
+	<input type="button" class="key" value="ㅐ" >
+	<input type="button" class="key" value="ㅔ" >
+	<br>
+	　<input type="button" class="key" value="ㅁ" >
+	<input type="button" class="key" value="ㄴ" >
 	<input type="button" class="key" value="ㅇ" >
+	<input type="button" class="key" value="ㄹ" >
+	<input type="button" class="key" value="ㅎ" >
+	　
+	<input type="button" class="key" value="ㅗ" >
+	<input type="button" class="key" value="ㅓ" >
 	<input type="button" class="key" value="ㅏ" >
+	<input type="button" class="key" value="ㅣ" >
+	<br>
+	　　<input type="button" class="key" value="ㅋ" >
+	<input type="button" class="key" value="ㅌ" >
+	<input type="button" class="key" value="ㅊ" >
+	<input type="button" class="key" value="ㅍ" >
+	<input type="button" class="key" value=" space ">
+	<input type="button" class="key" value="ㅠ" >
 	<input type="button" class="key" value="ㅜ" >
 	<input type="button" class="key" value="ㅡ" >
-	<input type="button" class="key" value="ㅣ" >
 
-
+</div>
 	
 	<script>
 	
@@ -173,12 +206,24 @@ $j('.key').on("click",function(){
 	
 	// input란에 있는 값
 	var text=$j('#test').val(); 
-
+	
 	
 	//input란에 있는 마지막 문자
 	var lasttext = text.substring(text.length-1);
 	
 	
+	if(key==" space "){
+		key=" ";
+		$j('#test').val(text+key);
+		$j('#test').focus();
+	}
+	
+	else if(key=="◀-"){
+		text=text.substring(0,text.length-1);
+		$j('#test').val(text);
+		$j('#test').focus();
+	}
+	else{
 	if(lasttext!=""){//마지막 문자가 공백이 아닐 경우만 실행 
 
 		//마지막 문자의 유니코드 
@@ -196,10 +241,14 @@ $j('.key').on("click",function(){
 		//마지막 문자가 하나의 자음만 있는 경우 
 		if(JM(lasttext_uni)=="J"){
 			chosung=lasttext;
+			joongsung="";
+			jongsung="";
 		
 		//마지막 문자가 하나의 모음만 있는 경우 
 		}else if(JM(lasttext_uni)=="M"){
+			chosung="";
 			joongsung=lasttext;
+			jongsung="";
 			
 		}else{//마지막 문자가 하나의 자음이나 모음이 아닌경우 
 
@@ -217,14 +266,15 @@ $j('.key').on("click",function(){
 			joongsung = joongsung_index[joong_idx];
 			jongsung = jongsung_index[jong_idx];
 		
-			console.log("마지막 문자의 초성,index : " + chosung + cho_idx);
-			console.log("마지막 문자의 중성,index : " + joongsung + joong_idx);
-			console.log("마지막 문자의 종성,index : " + jongsung + jong_idx);
+			
 
 	
 		}//마지막 문자가 하나의 자음이나 모음이 아닌경우  초,중,종 구하기 끝 
 		
-	
+		console.log("마지막문자 :  " + lasttext);
+		console.log("마지막 문자의 초성,index : " + chosung + cho_idx);
+		console.log("마지막 문자의 중성,index : " + joongsung + joong_idx);
+		console.log("마지막 문자의 종성,index : " + jongsung + jong_idx);
 		//2. 방금 친 글자 모음인지 자음인지 구별 
 		var key_jm = JM(key.charCodeAt(0));
 		console.log("방금 친 글자 : " + key +  " / 자음모음 : " + key_jm);
@@ -233,8 +283,94 @@ $j('.key').on("click",function(){
 		var key_idx;
 		
 		//3. 글자 재조합
+		
+		//앞에 자음만 있는 경우 + 자음
+		if(lasttext==chosung&&key_jm=="J"){
+			console.log("앞에 자음만 있는 경우 + 자음");
+			var newja = chosung+key;
+			
+			//앞자음 + 뒷자음 = 콤보인경우
+			if(Jcombo.indexOf(newja)!=-1){
+				newja = Jcombo_index[Jcombo.indexOf(newja)];
+					
+				text=text.substring(0,text.length-1);		
+				$j('#test').val(text+newja);
+				$j('#test').focus();
+			
+			//앞자음+ 뒷자음 = 콤보 아님 	
+			}else{
+				$j('#test').val(text+key);
+				$j('#test').focus();
+			}
+			
+
+		//앞에 자음만 있는경우 + 모음 
+		}else if(lasttext==chosung&&key_jm=="M"){
+			console.log("앞에 자음만 있는 경우 + 모음");
+			key_idx = joongsung_index.indexOf(key);
+			//앞 자음이 콤보인경우
+			if(Jcombo_index.indexOf(lasttext)!= -1){
+				var newja = Jcombo[Jcombo_index.indexOf(lasttext)];
+				var newja1 = newja.substring(0,1);
+				var newja2 = newja.substring(1,newja.length);
+				console.log("앞 자음의 콤보 쪼개기 : " + newja1 + ", " + newja2);
+				
+				var newja2_idx = chosung_index.indexOf(newja2);
+				
+				var str_uni =( (newja2_idx*21) + key_idx ) * 28  + 44032;
+				var str=String.fromCharCode(str_uni);
+				
+				hangeul = newja1+str;
+				text=text.substring(0,text.length-1);		
+				$j('#test').val(text+hangeul);
+				$j('#test').focus();	
+
+			
+			}else{//앞 자음이 콤보가 아닌 경우 ex) ㄱ + ㅏ  가 
+				cho_idx = chosung_index.indexOf(chosung);
+				var str_uni =( (cho_idx*21) + key_idx ) * 28  + 44032;
+				
+				var hangeul=String.fromCharCode(str_uni);
+				text=text.substring(0,text.length-1);		
+				$j('#test').val(text+hangeul);
+				$j('#test').focus();	
+				
+			}
+				
+		//앞에 모음만 있는 경우 + 자음
+		}else if(lasttext==joongsung&&key_jm=="J"){
+			console.log("앞에 모음만 있는 경우 + 자음");
+	
+			$j('#test').val(text+key);
+			$j('#test').focus();	
+		
+		//앞에 모음만 있는 경우 + 모음 
+		}else if(lasttext==joongsung&&key_jm=="M"){
+			console.log("앞에 모음만 있는 경우 + 모음 ");
+			var newchar = lasttext+key;
+			
+			//모음이 콤보인 경우
+			if(Mcombo.indexOf(newchar)!=-1){
+				newchar = Mcombo_index[Mcombo.indexOf(newchar)];
+				
+				text=text.substring(0,text.length-1);		
+				$j('#test').val(text+newchar);
+				$j('#test').focus();	
+				
+			//모음이 콤보 아닌 경우
+			}else{
+		
+				$j('#test').val(text+key);
+				$j('#test').focus();
+				
+			}
+			
+			
+			
+			
 		//3-1 이전글자 종성이 있는경우 + 자음
-		if(jongsung!="" && key_jm=="J"){
+		}else if(jongsung!="" && key_jm=="J"){
+			console.log("이전글자 종성이 있는 경우 + 자음");
 			var newjong_idx = Jcombo.indexOf(jongsung+key);
 			console.log(newjong_idx);
 	
@@ -251,7 +387,7 @@ $j('.key').on("click",function(){
 				$j('#test').val(text+hangeul);
 				$j('#test').focus();	
 			
-			//이전글자 종성 + 입력한 자음이 Combo에 없는 경우  ex) 각+ㅅ =갃
+			//이전글자 종성 + 입력한 자음이 Combo에 없는 경우  ex) 각+ㅇ =각ㅇ
 			}else{
 				$j('#test').val(text+key);
 				$j('#test').focus();			
@@ -261,6 +397,7 @@ $j('.key').on("click",function(){
 
 		//3-2 이전글자 종성이 있는 경우 + 모음  ex) 강 + ㅏ  = 가아   값 + ㅏ + 갑 사
 		}else if(jongsung!="" && key_jm=="M"){ 
+			console.log("이전글자 종성이 있는경우 + 모음");
 			var newjong_idx = Jcombo_index.indexOf(jongsung);
 			key_idx=joongsung_index.indexOf(key);
 			
@@ -278,7 +415,7 @@ $j('.key').on("click",function(){
 
 				
 				hangeul = String.fromCharCode(str_uni1) + String.fromCharCode(str_uni2);
-				console.log(hangeul);
+				console.log("새로 조합한 문자 : " + hangeul);
 				
 				text=text.substring(0,text.length-1);		
 				$j('#test').val(text+hangeul);
@@ -294,7 +431,7 @@ $j('.key').on("click",function(){
 				console.log(jong_idx);
 				
 				hangeul = String.fromCharCode(str_uni1) + String.fromCharCode(str_uni2);
-				console.log(hangeul);
+				console.log("새로 조합한 문자 : " + hangeul);
 				
 				text=text.substring(0,text.length-1);		
 				$j('#test').val(text+hangeul);
@@ -304,20 +441,55 @@ $j('.key').on("click",function(){
 			
 			
 			
-		//3-3 이전글자 종성이 없는 경우 + 자음
+		//3-3 이전글자 종성이 없는 경우 + 자음 ex) 가 + ㅇ = 강, 가 + ㅉ = 가ㅉ
 		}else if(jongsung=="" && key_jm=="J"){
+			console.log("이전글자 종성이 없는 경우 + 자음");
+			key_idx = jongsung_index.indexOf(key);
+			
+			//입력한 자음이 받침이 될 수 있는 경우
+			if(key_idx!=-1){
+			str_uni = ( (cho_idx*21)+joong_idx ) * 28 +key_idx + 44032;
+			hangeul = String.fromCharCode(str_uni);
+			
+			console.log("새로 조합한 문자 : " + hangeul);
+			
+			text=text.substring(0,text.length-1);		
+			$j('#test').val(text+hangeul);
+			$j('#test').focus();	
+			
+			//입력한 자음이 받침이 될 수 없는 경우 
+			}else{
+				$j('#test').val(text+key);
+				$j('#test').focus();
+			}
 			
 		//3-4 이전글자 종성이 없는 경우 + 모음
 		}else if(jongsung=="" && key_jm=="M"){
-		
-		//3-5 앞에 자음만 있는 경우
-		}else if(lasttext==chosung){
-		
-		//3-6 앞에 모음만 있는 경우
-		}else{
-			
+			console.log("이전글자 종성이 없는 경우 + 모음");
+			var mcom = joongsung+key; // ㅜㅣ
+			var mcom_idx = Mcombo.indexOf(mcom);	
+
+			//이전글자 모음(중성) + 친 글자(모음) = 콤보인경우 ex. 구 + ㅣ = 귀
+			 if(mcom_idx!=-1){
+
+				mcom=Mcombo_index[mcom_idx];
+				mcom_idx=joongsung_index.indexOf(mcom);
+				str_uni = ((cho_idx*21 )  + mcom_idx ) * 28 + 44032;			 
+				hangeul = String.fromCharCode(str_uni);
+				console.log("새로 조합한 문자 : " + hangeul);
+					
+				text=text.substring(0,text.length-1);		
+				$j('#test').val(text+hangeul);
+				$j('#test').focus();	
+				 
+				//이전글자 모음(중성) + 친글자(모음) 콤보 아닌경우 ex.구 + ㅏ = 구ㅏ
+			 }else{
+				 console.log("이전글자 모음 + 친글자 모음 ");
+				$j('#test').val(text+key);
+				$j('#test').focus();
+			 }
+				
 		}
-		
 		
 
 	}//마지막 문자가 공백이 아닌경우 끝 
@@ -327,6 +499,7 @@ $j('.key').on("click",function(){
 		$j('#test').val(text+key);
 		$j('#test').focus();
 	}
+}
 
 	
 });
