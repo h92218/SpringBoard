@@ -12,8 +12,10 @@
 
 </script>
 <body>
-	<table align="center">
+${codeMap.a01}
+${codeMap.a02}
 
+	<table align="center">
 		<tr>
 			<td align="right">
 			<div style="text-align:left;width:50%;float:left;">
@@ -132,10 +134,22 @@
 	<input type="button" class="key" value="ㅡ" >
 
 </div>
+<br>
+	<div id="divtest" style="width:500px;height:500px;">
+	<table id="boardTest" border="1">
+					<tr>
+						<td width="80" align="center">Type</td>
+						<td width="40" align="center">No</td>
+						<td width="300" align="center">Title</td>
+					</tr>
+
+	</table>
 	
+	</div>
 	
 	<script>
-	
+var map = "<c:out value='${codeMap.a01}'/>";
+alert(map);
 
 $j('#checkall').click(function(){
 	if($j('#checkall').is(':checked')){
@@ -154,7 +168,8 @@ $j('.checktype').click(function(){
 	}
 });
 
-/* //글 타입별 검색 선택 
+//게시판 글 조회 AJAX
+
 $j("#search").on("click",function(){
 	var ch = $j('input:checked').val();
 	if(ch==null){
@@ -169,19 +184,19 @@ $j("#search").on("click",function(){
 	alert(param); 
 	
 	$j.ajax({
-	    url : "/board/boardTypeCheck1.do",
+	    url : "/board/boardTypeList.do",
 	    dataType: "json",
 	    type: "POST",
 	    data : param,
 
-	    success: function(a)
+	    success: function(data)
 	    {
-	    	console.log(a.list.length)
-	    	for(var i=0;i<a.list.length;i++){
-	    		console.log(a.list[i].boardType);
-	    		console.log(a.list[i].boardNum);
-	    		console.log(a.list[i].boardTitle);
-	    		target.html(); //으로 뿌리면 됨
+	    	console.log(data.list.length)
+	    	for(var i=0;i<data.list.length;i++){
+				$j('#boardTest').append("<tr><td>" + "\"<c:out value='${codeMap."+ data.list[i].boardType +"}'/>\"" + "</td>" +
+											"<td>" + data.list[i].boardNum + "</td>" +
+											"<td>" + data.list[i].boardTitle + "</td></tr>"); //으로 뿌리면 됨
+	 
 	    	}
 			alert("검색완료");
 
@@ -194,9 +209,7 @@ $j("#search").on("click",function(){
 	});
 	
 	
-}); */
-
-
+});  
 
 
 
