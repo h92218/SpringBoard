@@ -165,6 +165,31 @@ public class BoardController {
 		return "board/boardWrite";
 	}
 	
+	/*//글쓰기 폼 호출
+		@RequestMapping(value = "/board/boardTypeCheck1.do", method = RequestMethod.POST)
+		@ResponseBody
+		public String boardTypeCheck1(Locale locale, Model model,HttpServletRequest request,HttpSession session) throws Exception{
+			HashMap<String, Object> map = new HashMap<String, Object>(); //page와 checkbox 선택지 용
+			List<BoardVo> boardList = new ArrayList<BoardVo>(); //글 가져올 List 생성
+			String[] boardType; //checkbox 선택지 가져올 배열 생성
+			PageVo pageVo = new PageVo();
+			pageVo.setPageNo(1);
+			boardType=request.getParameterValues("boardType"); //checkbox 선택지 가져오기
+			map.put("boardType", boardType);//checkbox 선택지 map에 담기 
+			map.put("pageVo",pageVo);
+			
+			boardList = boardService.selectBoardType(map);//pageVo와 checkbox 선택지 넘김
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			CommonUtil commonUtil = new CommonUtil();
+			
+			result.put("list", boardList);
+			String result1 = commonUtil.getJsonCallBackString(" ", result);
+			
+			
+			
+			return result1;
+		}*/
+	
 	//글등록 수행
 	@RequestMapping(value = "/board/boardWriteAction.do", method = RequestMethod.POST)
 	@ResponseBody
@@ -376,6 +401,9 @@ public class BoardController {
 		return "redirect:/board/boardList.do";
 	}
 	
+	
+
+
 	//엑셀로 출력하기
 	@RequestMapping(value="/board/excelDown.do")
 	public void excelDown(HttpServletResponse response) throws Exception {
@@ -671,9 +699,7 @@ public class BoardController {
 				}				
 			}
 		}
-		
-
-	
+			
 		//컨텐츠 타입과 파일명 지정
 		response.setContentType("ms-vnd/excel");
 		response.setHeader("Content-Disposition", "attachment;filename=calentdar_test.xlsx");
@@ -682,8 +708,22 @@ public class BoardController {
 		wb.write(response.getOutputStream());
 		wb.close();
 		
-		
-		
+			
 		}//달력출력 끝 
+	
+	//게시글 타입 선택 AJAX처리                      
+//	@RequestMapping(value = "/board/boardTypeCheck.do", method = RequestMethod.POST)
+//	public String boardTypeCheck(HttpServletRequest request) throws Exception{
+//		HashMap<String, Object> map = new HashMap<String, Object>();
+//		
+//		String[] boardType; //checkbox 선택지 가져올 배열 생성
+//		boardType=request.getParameterValues("boardType"); //checkbox 선택지 가져오기
+//		System.out.println("boarType[0] : " + boardType[0]);
+//		System.out.println("boardType[1] : " + boardType[1]);
+//		map.put("boardType", boardType);//checkbox 선택지 map에 담기 
+//				
+//		return "board/NewFile";
+//		}
+	
 
 }

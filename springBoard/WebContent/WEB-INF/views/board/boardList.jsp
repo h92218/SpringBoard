@@ -76,10 +76,10 @@
 					onsubmit="return beforeSubmit()">
 					<input type="checkbox" name="boardType" id="checkall" value="">전체선택
 					<c:forEach items="${codeList}" var="list">
-						<input type="checkbox" name="boardType" class="checktype"
-							value="${list.codeId}">${list.codeName}
-		</c:forEach>
-					<input type="submit" value="조회">
+						<input type="checkbox" name="boardType" class="checktype" value="${list.codeId}">${list.codeName}
+					</c:forEach>
+					<!--  <input type="submit" value="조회">-->
+					<input type="button" id="search" value="조회">
 				</form>
 			</td>
 		</tr>
@@ -133,6 +133,7 @@
 
 </div>
 	
+	
 	<script>
 	
 
@@ -153,14 +154,51 @@ $j('.checktype').click(function(){
 	}
 });
 
-function beforeSubmit(){
+/* //글 타입별 검색 선택 
+$j("#search").on("click",function(){
 	var ch = $j('input:checked').val();
 	if(ch==null){
 		alert("체크 하세요");
 		return false;
 	}
-			
-}
+	
+	
+	var $frm = $j("input[class=checktype]:checked");
+	var param = $frm.serialize();
+	
+	alert(param); 
+	
+	$j.ajax({
+	    url : "/board/boardTypeCheck1.do",
+	    dataType: "json",
+	    type: "POST",
+	    data : param,
+
+	    success: function(a)
+	    {
+	    	console.log(a.list.length)
+	    	for(var i=0;i<a.list.length;i++){
+	    		console.log(a.list[i].boardType);
+	    		console.log(a.list[i].boardNum);
+	    		console.log(a.list[i].boardTitle);
+	    		target.html(); //으로 뿌리면 됨
+	    	}
+			alert("검색완료");
+
+	    },
+	    error: function ()
+	    {
+	    	alert("검색실패");
+	    	
+	    }
+	});
+	
+	
+}); */
+
+
+
+
 
 
 //달력 년, 월 검색
@@ -191,10 +229,6 @@ var JM = function(char_uni){ // 글자가 자음인가 모음인가?
 		return "";
 	}
 }
-
-
-
-
 
 $j('.key').on("click",function(){
 	
