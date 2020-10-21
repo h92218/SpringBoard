@@ -691,9 +691,10 @@ public class BoardController {
 	
 	
 	//글 타입 조회 AJAX처리
-	@RequestMapping(value="/board/boardTypeList.do", method=RequestMethod.POST)
+	@RequestMapping(value="/board/boardTypeList.do", method=RequestMethod.POST, produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String BoardTypeList(HttpServletRequest request,Model model) throws Exception {
+		System.out.println("ajax 시작 ");
 		HashMap<String, Object> map = new HashMap<String, Object>(); //page와 checkbox 선택지 용
 		String[] boardType; //checkbox 선택지 가져올 배열 생성
 		boardType=request.getParameterValues("boardType"); //checkbox 선택지 가져오기
@@ -711,6 +712,9 @@ public class BoardController {
 		List<BoardVo> boardList = new ArrayList<BoardVo>(); //글 가져올 List 생성
 		boardList = boardService.selectBoardType(map);//pageVo와 checkbox 선택지 넘김
 		
+		int totalCnt = 0; //totalCnt 초기화
+		totalCnt = boardService.boardTypeListCount(boardType); //checkbox 선택지 넘김
+		
 		HashMap<String, String> codeMap = new HashMap<String, String>(); //타입 id - name 짝 map 생성
 		List<CodeVo> codeList = new ArrayList<CodeVo>(); //타입 가져올 List 생성
 		codeList = boardService.selectCode("menu");//타입id, 타입 이름 가져오기	
@@ -722,34 +726,16 @@ public class BoardController {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		CommonUtil commonUtil = new CommonUtil();
 		result.put("list", boardList);
+		result.put("totalCnt", totalCnt);
+		result.put("codeMap", codeMap);
+		
 		String result1 = commonUtil.getJsonCallBackString(" ", result);
 		System.out.println("result1 : " + result1);
 		
 		model.addAttribute("codeMap",codeMap);
+		model.addAttribute("totalCnt", totalCnt);
 		return result1;
 	}
 	
-	/*//글 조회 AJAX 처리
-	@RequestMapping(value = "/board/boardTypeCheck1.do", method = RequestMethod.POST)
-	@ResponseBody
-	public String boardTypeCheck1(Locale locale, Model model,HttpServletRequest request,HttpSession session) throws Exception{
-		HashMap<String, Object> map = new HashMap<String, Object>(); //page와 checkbox 선택지 용
-		List<BoardVo> boardList = new ArrayList<BoardVo>(); //글 가져올 List 생성
-		String[] boardType; //checkbox 선택지 가져올 배열 생성
-		PageVo pageVo = new PageVo();
-		pageVo.setPageNo(1);
-		boardType=request.getParameterValues("boardType"); //checkbox 선택지 가져오기
-		map.put("boardType", boardType);//checkbox 선택지 map에 담기 
-		map.put("pageVo",pageVo);
-		
-		boardList = boardService.selectBoardType(map);//pageVo와 checkbox 선택지 넘김
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		CommonUtil commonUtil = new CommonUtil();
-		
-		result.put("list", boardList);
-		String result1 = commonUtil.getJsonCallBackString(" ", result);
-		
 	
-		return result1;
-	}*/
 }

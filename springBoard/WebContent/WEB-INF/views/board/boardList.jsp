@@ -12,63 +12,63 @@
 
 </script>
 <body>
-${codeMap.a01}
-${codeMap.a02}
 
 	<table align="center">
 		<tr>
 			<td align="right">
-			<div style="text-align:left;width:50%;float:left;">
-				<c:if test="${userId==null}">
-					<a href="/board/LoginForm.do">login</a>
-					<a href="/board/boardJoin.do">join</a> 
-				</c:if>
-				<c:if test="${userId!=null}">
+				<div style="text-align: left; width: 50%; float: left;">
+					<c:if test="${userId==null}">
+						<a href="/board/LoginForm.do">login</a>
+						<a href="/board/boardJoin.do">join</a>
+					</c:if>
+					<c:if test="${userId!=null}">
 					[${userName}]님 로그인
-				</c:if> 
+				</c:if>
 				</div>
-		<div style="width:50%;float:right;">total : ${totalCnt}</div>
-		
+				<div id="cntbox" style="text-align:right;width: 50%;">total : ${totalCnt}</div>
 			</td>
-
 		</tr>
 		<tr>
 			<td>
-				<table id="boardTable" border="1">
-					<tr>
-						<td width="80" align="center">Type</td>
-						<td width="40" align="center">No</td>
-						<td width="300" align="center">Title</td>
-					</tr>
-					<c:forEach items="${boardList}" var="list">
+					
+					<table id="boardTest" border="1">
 						<tr>
-							<td align="center">${codeMap[list.boardType]}</td>
-							<td>${list.boardNum}</td>
-							<td><a
-								href="/board/${list.boardType}/${list.boardNum}/boardView.do?pageNo=${pageNo}">${list.boardTitle}</a>
-							</td>
+							<td width="80" align="center">Type</td>
+							<td width="40" align="center">No</td>
+							<td width="300" align="center">Title</td>
 						</tr>
-					</c:forEach>
-				</table>
+						<c:forEach items="${boardList}" var="list">
+							<tr>
+								<td align="center">${codeMap[list.boardType]}</td>
+								<td>${list.boardNum}</td>
+								<td><a
+									href="/board/${list.boardType}/${list.boardNum}/boardView.do?pageNo=${pageNo}">${list.boardTitle}</a>
+								</td>
+							</tr>
+						</c:forEach>
+
+					</table>
+
+
 			</td>
 		</tr>
 		<tr>
 			<td align="right">
-			<div style="width:50%;float:left;text-align:left;">
-			<input type="button" onclick="location.href='/board/excelDown.do'" value="엑셀 다운로드" style="align:left;">
-			</div>
-			<div style="width:50%;float:right;">
-			<a href="/board/boardWrite.do">글쓰기</a>	
-			<c:if test="${userId!=null}">
-			<a href="/board/Logout.do">로그아웃</a>
-			</c:if> 
-			</div>
+				<div style="width: 50%; float: left; text-align: left;">
+					<input type="button" onclick="location.href='/board/excelDown.do'"
+						value="엑셀 다운로드" style="align: left;">
+				</div>
+				<div style="width: 50%; float: right;">
+					<a href="/board/boardWrite.do">글쓰기</a>
+					<c:if test="${userId!=null}">
+						<a href="/board/Logout.do">로그아웃</a>
+					</c:if>
+				</div>
 			</td>
 		</tr>
 		<tr>
-			<td>
-				<input type="number" id="year" min="1970" max="2025">년
-				<input type="number" id ="month" max="12" min="1" defaultvalue="1">월
+			<td><input type="number" id="year" min="1970" max="2025">년
+				<input type="number" id="month" max="12" min="1" defaultvalue="1">월
 				<input type="button" onclick="makeCalendar()" value="달력보기">
 			</td>
 		</tr>
@@ -78,7 +78,8 @@ ${codeMap.a02}
 					onsubmit="return beforeSubmit()">
 					<input type="checkbox" name="boardType" id="checkall" value="">전체선택
 					<c:forEach items="${codeList}" var="list">
-						<input type="checkbox" name="boardType" class="checktype" value="${list.codeId}">${list.codeName}
+						<input type="checkbox" name="boardType" class="checktype"
+							value="${list.codeId}">${list.codeName}
 					</c:forEach>
 					<!--  <input type="submit" value="조회">-->
 					<input type="button" id="search" value="조회">
@@ -86,70 +87,57 @@ ${codeMap.a02}
 			</td>
 		</tr>
 	</table>
-	
-	
+
+
 	<input type="text" id="test">
-	
-<div>
-	<input type="button" class="key" value="ㅃ" >
-	<input type="button" class="key" value="ㅉ" >
-	<input type="button" class="key" value="ㄸ" >
-	<input type="button" class="key" value="ㄲ" >
-	<input type="button" class="key" value="ㅆ" >
-	　　　　　　　
-	<input type="button" class="key" value="ㅒ" >
-	<input type="button" class="key" value="ㅖ" >
-	<input type="button" class="key" value="◀-">
-	<br>
-	<input type="button" class="key" value="ㅂ" >
-	<input type="button" class="key" value="ㅈ" >
-	<input type="button" class="key" value="ㄷ" >
-	<input type="button" class="key" value="ㄱ" >
-	<input type="button" class="key" value="ㅅ" >
-	　
-	<input type="button" class="key" value="ㅛ" >
-	<input type="button" class="key" value="ㅕ" >
-	<input type="button" class="key" value="ㅑ" >
-	<input type="button" class="key" value="ㅐ" >
-	<input type="button" class="key" value="ㅔ" >
-	<br>
-	　<input type="button" class="key" value="ㅁ" >
-	<input type="button" class="key" value="ㄴ" >
-	<input type="button" class="key" value="ㅇ" >
-	<input type="button" class="key" value="ㄹ" >
-	<input type="button" class="key" value="ㅎ" >
-	　
-	<input type="button" class="key" value="ㅗ" >
-	<input type="button" class="key" value="ㅓ" >
-	<input type="button" class="key" value="ㅏ" >
-	<input type="button" class="key" value="ㅣ" >
-	<br>
-	　　<input type="button" class="key" value="ㅋ" >
-	<input type="button" class="key" value="ㅌ" >
-	<input type="button" class="key" value="ㅊ" >
-	<input type="button" class="key" value="ㅍ" >
-	<input type="button" class="key" value=" space ">
-	<input type="button" class="key" value="ㅠ" >
-	<input type="button" class="key" value="ㅜ" >
-	<input type="button" class="key" value="ㅡ" >
+<br> 　
+	<div>
+		<input type="button" class="key" value="ㅃ"> 
+		<input type="button" class="key" value="ㅉ"> 
+		<input type="button" class="key" value="ㄸ"> 
+		<input type="button" class="key" value="ㄲ"> 
+		<input type="button" class="key" value="ㅆ">
+		　　　　　　　　　　
+		<input type="button" class="key" value="ㅒ"> 
+		<input type="button" class="key" value="ㅖ"> 
+		<input type="button" class="key" value="◀-"> 
+		<br> 　
+		<input type="button" class="key" value="ㅂ"> 
+		<input type="button" class="key" value="ㅈ"> 
+		<input type="button" class="key" value="ㄷ">
+		<input type="button" class="key" value="ㄱ"> 
+		<input type="button" class="key" value="ㅅ"> 
+		　　　
+		<input type="button" class="key" value="ㅛ"> 
+		<input type="button" class="key" value="ㅕ"> 
+		<input type="button" class="key" value="ㅑ">
+		<input type="button" class="key" value="ㅐ"> 
+		<input type="button" class="key" value="ㅔ"> 
+		<br> 　　
+		<input type="button" class="key" value="ㅁ"> 
+		<input type="button" class="key" value="ㄴ"> 
+		<input type="button" class="key" value="ㅇ"> 
+		<input type="button" class="key" value="ㄹ">
+		<input type="button" class="key" value="ㅎ"> 
+		　
+		<input type="button" class="key" value="ㅗ"> 
+		<input type="button" class="key" value="ㅓ"> 
+		<input type="button" class="key" value="ㅏ"> 
+		<input type="button" class="key" value="ㅣ">
+		<br> 　　　
+		<input type="button" class="key" value="ㅋ"> 
+		<input type="button" class="key" value="ㅌ"> 
+		<input type="button" class="key" value="ㅊ"> 
+		<input type="button" class="key" value="ㅍ"> 
+		<input type="button" class="key" value=" space ">
+		<input type="button" class="key" value="ㅠ"> 
+		<input type="button" class="key" value="ㅜ"> 
+		<input type="button" class="key" value="ㅡ">
 
-</div>
-<br>
-	<div id="divtest" style="width:500px;height:500px;">
-	<table id="boardTest" border="1">
-					<tr>
-						<td width="80" align="center">Type</td>
-						<td width="40" align="center">No</td>
-						<td width="300" align="center">Title</td>
-					</tr>
-
-	</table>
-	
 	</div>
-	
+	<br>
+
 	<script>
-var map = "<c:out value='${codeMap.a01}'/>";
-alert(map);
 
 $j('#checkall').click(function(){
 	if($j('#checkall').is(':checked')){
@@ -169,7 +157,6 @@ $j('.checktype').click(function(){
 });
 
 //게시판 글 조회 AJAX
-
 $j("#search").on("click",function(){
 	var ch = $j('input:checked').val();
 	if(ch==null){
@@ -181,7 +168,7 @@ $j("#search").on("click",function(){
 	var $frm = $j("input[class=checktype]:checked");
 	var param = $frm.serialize();
 	
-	alert(param); 
+	var table = document.getElementById('boardTest');
 	
 	$j.ajax({
 	    url : "/board/boardTypeList.do",
@@ -192,23 +179,28 @@ $j("#search").on("click",function(){
 	    success: function(data)
 	    {
 	    	console.log(data.list.length)
-	    	for(var i=0;i<data.list.length;i++){
-				$j('#boardTest').append("<tr><td>" + "\"<c:out value='${codeMap."+ data.list[i].boardType +"}'/>\"" + "</td>" +
-											"<td>" + data.list[i].boardNum + "</td>" +
-											"<td>" + data.list[i].boardTitle + "</td></tr>"); //으로 뿌리면 됨
-	 
+	    	
+	    	$j('#cntbox').html("total : " + data.totalCnt);
+	    	//데이터를 새로 뿌리기 위해 이전 표를 지움 
+	    	var trlength = $j('#boardTest tr').length;
+	    	for(var t=trlength-1;t>0;t--){
+	    		table.deleteRow(t);
 	    	}
-			alert("검색완료");
-
+	    	//데이터 뿌리기 
+	    	for(var i=0;i<data.list.length;i++){
+				$j('#boardTest').append("<tr><td align='center'>" + data.codeMap[data.list[i].boardType] + "</td>" +
+											"<td>" + data.list[i].boardNum + "</td>" +
+											"<td><a href= '/board/" + data.list[i].boardType 
+													+ "/" + data.list[i].boardNum 
+													+ "/boardView.do?pageNo=" ;
+	    	}
 	    },
 	    error: function ()
 	    {
 	    	alert("검색실패");
 	    	
 	    }
-	});
-	
-	
+	});	
 });  
 
 
