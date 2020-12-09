@@ -156,7 +156,7 @@ $j('.checktype').click(function(){
 	}
 });
 
-//게시판 글 조회 AJAX
+  //게시판 글 조회 AJAX
 $j("#search").on("click",function(){
 	var ch = $j('input:checked').val();
 	if(ch==null){
@@ -167,10 +167,11 @@ $j("#search").on("click",function(){
 	
 	var $frm = $j("input[class=checktype]:checked");
 	var param = $frm.serialize();
+	console.log(param);
 	
 	var table = document.getElementById('boardTest');
 	
-	$j.ajax({
+	 $j.ajax({
 	    url : "/board/boardTypeList.do",
 	    dataType: "json",
 	    type: "POST",
@@ -187,21 +188,21 @@ $j("#search").on("click",function(){
 	    		table.deleteRow(t);
 	    	}
 	    	//데이터 뿌리기 
-	    	for(var i=0;i<data.list.length;i++){
+	    	 for(var i=0;i<data.list.length;i++){
 				$j('#boardTest').append("<tr><td align='center'>" + data.codeMap[data.list[i].boardType] + "</td>" +
 											"<td>" + data.list[i].boardNum + "</td>" +
-											"<td><a href= '/board/" + data.list[i].boardType 
-													+ "/" + data.list[i].boardNum 
-													+ "/boardView.do?pageNo=" ;
-	    	}
+											"<td><a href= '/board/ " + data.list[i].boardType + "/" + data.list[i].boardNum
+											+ "/boardView.do?pageNo=1'>"+data.list[i].boardTitle+ "</td>"); 
+										
+	    	} 
 	    },
 	    error: function ()
 	    {
 	    	alert("검색실패");
 	    	
 	    }
-	});	
-});  
+	}); 
+});    
 
 
 
