@@ -8,6 +8,8 @@
     	<result property="boardTitle" 	column="BOARD_TITLE"/>
     	<result property="boardComment" column="BOARD_COMMENT"/>
     	<result property="totalCnt"		column="total_cnt"/>
+    	<result property="boardFile"	column="BOARD_FILE"/>
+    	<result property="fileName" 	column="FILE_NAME"/>
     </resultMap>
     
     <resultMap type="com.spring.board.vo.CodeVo" id="codeVo">
@@ -216,6 +218,7 @@
         ,CREATE_TIME
         ,MODIFIER
         ,MODIFIED_TIME
+        ,BOARD_FILE
         )
         VALUES
         (#{boardType}
@@ -233,6 +236,7 @@
         ,TO_CHAR(SYSDATE)
         ,'SYSTEM'
         ,TO_CHAR(SYSDATE)
+        ,#{boardFile}
         )
     </select>
 </mapper>

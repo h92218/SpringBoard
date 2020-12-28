@@ -535,7 +535,7 @@ public class BoardController {
 
 		
 		//파일 읽기
-		FileInputStream fis = new FileInputStream("C:\\Users\\TOPIA\\Desktop\\calendar.xlsx");
+		FileInputStream fis = new FileInputStream("C:\\Users\\heirr\\Desktop\\calendar.xlsx");
 		//워크북 생성
 		Workbook wb = new XSSFWorkbook(fis);
 		//시트 읽기
@@ -694,7 +694,6 @@ public class BoardController {
 	@RequestMapping(value="/board/boardTypeList.do", method=RequestMethod.POST, produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String BoardTypeList(HttpServletRequest request,Model model) throws Exception {
-		System.out.println("ajax 시작 ");
 		HashMap<String, Object> map = new HashMap<String, Object>(); //page와 checkbox 선택지 용
 		String[] boardType; //checkbox 선택지 가져올 배열 생성
 		boardType=request.getParameterValues("boardType"); //checkbox 선택지 가져오기

@@ -85,6 +85,11 @@
 						</td>
 					</tr>
 					<tr>
+						<td align="center"> 파일 첨부 </td>
+						<td><input type="file" name="boardFile" id="boardFile"/>
+						</td>
+					</tr>
+					<tr>
 						<td align="center">
 						Writer
 						</td>

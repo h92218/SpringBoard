@@ -1,6 +1,9 @@
 package com.spring.board.vo;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class BoardVo {
 	
@@ -11,6 +14,10 @@ public class BoardVo {
 	private String 	creator;
 	private String	modifier;
 	private int totalCnt;
+	
+	private String fileName;
+	private byte[] boardFile;
+	private MultipartFile multipartFile;
 
 	
 	private List<BoardVo> boardVoList;
@@ -67,6 +74,34 @@ public class BoardVo {
 	public void setModifier(String modifier) {
 		this.modifier = modifier;
 	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public byte[] getBoardFile() {
+		return boardFile;
+	}
+	public void setBoardFile(byte[] boardFile) {
+		this.boardFile = boardFile;
+	}
+	public MultipartFile getMultipartFile() {
+		return multipartFile;
+	}
+	//MultipartFile -> byte[]로 변환
+	public void setMultipartFile(MultipartFile multipartFile) throws IOException {
+		this.multipartFile = multipartFile;
+		//byte[]로 변환
+		setBoardFile(multipartFile.getBytes());
+		//파일명 구하기
+		setFileName(multipartFile.getOriginalFilename());
+	}
+	
+	
+	
+	
 	
 	
 }
